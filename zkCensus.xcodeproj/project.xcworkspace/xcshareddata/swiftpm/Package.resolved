@@ -1,0 +1,42 @@
+{
+  "originHash" : "522dc84ef4c06e1ff4d88d17c70798eafd2f07c7a1d05425c5dc2f3e4f4f9cb9",
+  "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire.git",
+      "state" : {
+        "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
+        "version" : "5.10.2"
+      }
+    },
+    {
+      "identity" : "charts",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/danielgindi/Charts.git",
+      "state" : {
+        "revision" : "dd9c72e3d7e751e769971092a6bd72d39198ae63",
+        "version" : "5.1.0"
+      }
+    },
+    {
+      "identity" : "keychainaccess",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kishikawakatsumi/KeychainAccess.git",
+      "state" : {
+        "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
+        "version" : "4.2.2"
+      }
+    },
+    {
+      "identity" : "privy-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/privy-io/privy-ios.git",
+      "state" : {
+        "revision" : "e82a9f0a8f20a8ce99e678969795a5ee0713e463",
+        "version" : "2.5.3"
+      }
+    }
+  ],
+  "version" : 3
+}
