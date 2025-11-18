@@ -1,0 +1,99 @@
+name: zkCensus
+options:
+  bundleIdPrefix: com.zkcensus
+  deploymentTarget:
+    iOS: "16.0"
+  groupSortPosition: top
+
+packages:
+  # SolanaSwift temporarily disabled due to WebSocketDelegate compatibility issues
+  # Will need to either:
+  # 1. Use a specific version with compatible Starscream
+  # 2. Wait for upstream fixes
+  # 3. Implement wallet functionality differently
+  # SolanaSwift:
+  #   url: https://github.com/metaplex-foundation/Solana.Swift.git
+  #   from: 1.0.0
+
+  # Privy iOS SDK for social login + embedded wallets
+  PrivySDK:
+    url: https://github.com/privy-io/privy-ios.git
+    from: 2.5.0
+
+  Alamofire:
+    url: https://github.com/Alamofire/Alamofire.git
+    from: 5.8.0
+  KeychainAccess:
+    url: https://github.com/kishikawakatsumi/KeychainAccess.git
+    from: 4.2.2
+  Charts:
+    url: https://github.com/danielgindi/Charts.git
+    from: 5.0.0
+
+targets:
+  zkCensus:
+    type: application
+    platform: iOS
+    deploymentTarget: "16.0"
+    sources:
+      - path: zkCensus/App
+      - path: zkCensus/Core
+      - path: zkCensus/Features
+      - path: zkCensus/Models
+      - path: zkCensus/Services
+    dependencies:
+      # - package: SolanaSwift
+      #   product: Solana
+      - package: PrivySDK
+        product: PrivySDK
+      - package: Alamofire
+        product: Alamofire
+      - package: KeychainAccess
+        product: KeychainAccess
+      - package: Charts
+        product: DGCharts
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.ayushsrivastav.zkCensus
+        PRODUCT_NAME: zkCensus
+        INFOPLIST_FILE: zkCensus/Info.plist
+        CODE_SIGN_ENTITLEMENTS: zkCensus/zkCensus.entitlements
+        DEVELOPMENT_TEAM: DJ426XH8F3
+        CODE_SIGN_STYLE: Automatic
+        SWIFT_VERSION: "5.9"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        IPHONEOS_DEPLOYMENT_TARGET: "16.0"
+        ENABLE_BITCODE: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        GENERATE_INFOPLIST_FILE: NO
+      configs:
+        Debug:
+          SWIFT_OPTIMIZATION_LEVEL: "-Onone"
+        Release:
+          SWIFT_OPTIMIZATION_LEVEL: "-O"
+    info:
+      path: zkCensus/Info.plist
+      properties:
+        CFBundleDisplayName: zkCensus
+        CFBundleIdentifier: $(PRODUCT_BUNDLE_IDENTIFIER)
+        CFBundleInfoDictionaryVersion: "6.0"
+        CFBundleName: $(PRODUCT_NAME)
+        CFBundlePackageType: APPL
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        LSRequiresIPhoneOS: true
+        UILaunchScreen: {}
+        UIRequiredDeviceCapabilities: [armv7]
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        NSCameraUsageDescription: "zkCensus needs camera access to scan passports"
+        NFCReaderUsageDescription: "zkCensus needs NFC access to read passport chips"
+        com.apple.developer.nfc.readersession.formats: ["TAG"]
