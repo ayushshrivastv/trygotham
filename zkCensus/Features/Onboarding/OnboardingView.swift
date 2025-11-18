@@ -214,12 +214,13 @@ struct OnboardingView: View {
         // TEMPORARY: Bypass email authentication for development/testing
         // In production, this should properly authenticate with Privy
 
-        // Simulate successful authentication
+        // Simulate successful authentication and navigate to user type selection
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            print("Email authentication bypassed - proceeding to app")
-            // TODO: Set proper authentication state when email flow is implemented
-            // For now, just close the error if it's showing
-            self.showError = false
+            print("Email authentication bypassed - user authenticated")
+            // Mark user as authenticated to proceed to the app
+            self.authManager.isAuthenticated = true
+            // Set a default user type (can be changed based on actual flow)
+            self.authManager.userType = .individual
         }
     }
 }
