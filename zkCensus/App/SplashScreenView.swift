@@ -7,24 +7,25 @@ struct SplashScreenView: View {
     
     var body: some View {
         ZStack {
-            // Background gradient (Gotham Night)
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color(red: 0.09, green: 0.11, blue: 0.14), // Dark slate
-                    Color(red: 0.02, green: 0.02, blue: 0.03)  // Almost black
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
+            // Background gradient
+            BackgroundGradientView()
             
-            // Logo
-            Image("ghost")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 120, height: 120)
-                .opacity(opacity)
-                .scaleEffect(isAnimating ? 1.0 : 0.85)
+            // Content
+            VStack(spacing: 20) {
+                Image("ghost_logo")
+                    .resizable()
+                    .cornerRadius(20)
+                    .scaledToFit()
+                    .frame(width: 300, height: 300)
+                    .shadow(color: .black.opacity(0.3), radius: 10, x: 0, y: 5)
+                
+                // Text("Ghost")
+                //     .font(.system(size: 40, weight: .bold, design: .rounded))
+                //     .foregroundColor(.black)
+                //     .shadow(color: .black.opacity(0.3), radius: 5, x: 0, y: 2)
+            }
+            .opacity(opacity)
+            .scaleEffect(isAnimating ? 1.0 : 0.85)
         }
         .onAppear {
             // Quick fade in
@@ -33,15 +34,15 @@ struct SplashScreenView: View {
                 isAnimating = true
             }
             
-            // Show for 1 second total, then dismiss
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            // Show for 1.5 seconds total, then dismiss
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 withAnimation(.easeOut(duration: 0.2)) {
                     opacity = 0.0
                 }
                 
                 // Dismiss after fade out
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    isActive = true
+                    isActive = false
                 }
             }
         }

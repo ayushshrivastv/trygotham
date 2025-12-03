@@ -16,16 +16,8 @@ struct CompanyOnboardingView: View {
 
     var body: some View {
         ZStack {
-            // Background gradient (Gotham Night)
-            LinearGradient(
-                gradient: Gradient(colors: [
-                    Color(red: 0.09, green: 0.11, blue: 0.14), // Dark slate
-                    Color(red: 0.02, green: 0.02, blue: 0.03)  // Almost black
-                ]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
+            // Background gradient
+            BackgroundGradientView()
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {

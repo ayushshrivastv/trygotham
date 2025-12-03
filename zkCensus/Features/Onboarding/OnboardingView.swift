@@ -21,16 +21,8 @@ struct OnboardingView: View {
                                 .ignoresSafeArea()
                                 .frame(minWidth: geometry.size.width, minHeight: geometry.size.height)
                         } else {
-                            // Fallback gradient background (Gotham Night)
-                            LinearGradient(
-                                gradient: Gradient(colors: [
-                                    Color(red: 0.09, green: 0.11, blue: 0.14), // Dark slate
-                                    Color(red: 0.02, green: 0.02, blue: 0.03)  // Almost black
-                                ]),
-                                startPoint: .top,
-                                endPoint: .bottom
-                            )
-                            .ignoresSafeArea()
+                            // Fallback gradient background
+                            BackgroundGradientView()
                         }
                     }
 
@@ -51,7 +43,7 @@ struct OnboardingView: View {
                         Spacer(minLength: geometry.size.height * 0.10)
 
                         // Logo
-                        Image("ghost")
+                        Image("ghost_logo")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 100, height: 100)

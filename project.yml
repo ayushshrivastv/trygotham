@@ -41,11 +41,12 @@ targets:
       - path: zkCensus/Features
       - path: zkCensus/Models
       - path: zkCensus/Services
+      - path: zkCensus/Assets.xcassets
     dependencies:
       # - package: SolanaSwift
       #   product: Solana
       - package: PrivySDK
-        product: PrivySDK
+        product: Privy
       - package: Alamofire
         product: Alamofire
       - package: KeychainAccess
