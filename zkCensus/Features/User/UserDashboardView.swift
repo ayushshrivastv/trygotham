@@ -8,10 +8,32 @@ struct UserDashboardView: View {
         // Customize TabBar appearance
         let appearance = UITabBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor(red: 0.2, green: 0.9, blue: 0.2, alpha: 1.0)
-        
+        appearance.backgroundColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1.0)  // Dark charcoal
+
+        // Set icon and text colors for all layout types
+        let itemAppearance = UITabBarItemAppearance()
+
+        // Normal state (unselected)
+        itemAppearance.normal.iconColor = UIColor.white.withAlphaComponent(0.6)
+        itemAppearance.normal.titleTextAttributes = [
+            .foregroundColor: UIColor.white.withAlphaComponent(0.6)
+        ]
+
+        // Selected state
+        itemAppearance.selected.iconColor = UIColor.white
+        itemAppearance.selected.titleTextAttributes = [
+            .foregroundColor: UIColor.white
+        ]
+
+        // Apply to all layout appearances
+        appearance.stackedLayoutAppearance = itemAppearance
+        appearance.inlineLayoutAppearance = itemAppearance
+        appearance.compactInlineLayoutAppearance = itemAppearance
+
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance
+        UITabBar.appearance().tintColor = UIColor.white
+        UITabBar.appearance().unselectedItemTintColor = UIColor.white.withAlphaComponent(0.6)
     }
 
     var body: some View {
@@ -44,7 +66,7 @@ struct UserDashboardView: View {
                 }
                 .tag(3)
         }
-        .accentColor(.black)
+        .accentColor(.white)
     }
 }
 
@@ -71,7 +93,7 @@ struct HomeView: View {
                             Text("Available Census")
                                 .font(.title2)
                                 .fontWeight(.bold)
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                                 .padding(.horizontal)
 
                             if censuses.isEmpty {
@@ -89,9 +111,11 @@ struct HomeView: View {
                     .padding(.vertical)
                 }
             }
-            .navigationTitle("zk-Census")
+            .navigationTitle("Ghost")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(.hidden, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(Color.clear, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
             .task {
                 await loadCensuses()
             }
@@ -105,14 +129,14 @@ struct HomeView: View {
         VStack(spacing: 16) {
             Text("Quick Actions")
                 .font(.headline)
-                .foregroundColor(.black)
+                .foregroundColor(.white)
                 .frame(maxWidth: .infinity, alignment: .leading)
 
             HStack(spacing: 16) {
                 QuickActionButton(
                     icon: "camera.fill",
                     title: "Scan Passport",
-                    color: .black
+                    color: .white
                 ) {
                     showScanPassport = true
                 }
@@ -120,7 +144,7 @@ struct HomeView: View {
                 QuickActionButton(
                     icon: "building.2.fill",
                     title: "Find Companies",
-                    color: .black
+                    color: .white
                 ) {
                     // Navigate to companies
                 }
@@ -181,7 +205,7 @@ struct QuickActionButton: View {
                 Text(title)
                     .font(.caption)
                     .fontWeight(.medium)
-                    .foregroundColor(.black)
+                    .foregroundColor(.white)
                     .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)
@@ -289,7 +313,9 @@ struct MyProofsView: View {
                 }
             }
             .navigationTitle("My Proofs")
-            .toolbarBackground(.hidden, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(Color.clear, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
         }
     }
 }
@@ -366,7 +392,9 @@ struct UserCompaniesView: View {
                                     .padding(.horizontal)
                             } else {
                                 ForEach(connections) { connection in
-                                    NavigationLink(destination: CompanyDetailView(connection: connection)) {
+                                    NavigationLink(
+                                        destination: CompanyDetailView(connection: connection)
+                                    ) {
                                         UserConnectionRow(connection: connection)
                                     }
                                 }
@@ -391,7 +419,9 @@ struct UserCompaniesView: View {
                 }
             }
             .navigationTitle("Companies")
-            .toolbarBackground(.hidden, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(Color.clear, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
@@ -523,113 +553,128 @@ struct UserProfileView: View {
 
                 ScrollView {
                     VStack(spacing: 24) {
-                        // Profile Header
-                        VStack(spacing: 16) {
-                            Image(systemName: "person.circle.fill")
-                                .font(.system(size: 80))
-                                .foregroundColor(.white)
-                                .shadow(color: .white.opacity(0.1), radius: 10)
-
-                            VStack(spacing: 4) {
-                                Text("Individual User")
-                                    .font(.title3)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(.white)
-
-                                if let user = authManager.currentUser,
-                                   let proofCount = user.zkProofCount {
-                                    Text("\(proofCount) ZK proof(s) created")
-                                        .font(.caption)
-                                        .foregroundColor(.white.opacity(0.7))
-                                }
-                            }
-                        }
-                        .padding(.top, 20)
-
-                        // Wallet Section
-                        if let address = authManager.currentUser?.walletAddress {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Wallet")
-                                    .font(.caption)
-                                    .foregroundColor(.white.opacity(0.5))
-                                    .padding(.horizontal)
-
-                                HStack {
-                                    Text("Address")
-                                        .foregroundColor(.white)
-                                    Spacer()
-                                    Text(address.prefix(8) + "..." + address.suffix(8))
-                                        .font(.system(.caption, design: .monospaced))
-                                        .foregroundColor(.white.opacity(0.7))
-                                }
-                                .padding()
-                                .background(Color.white.opacity(0.05))
-                                .cornerRadius(12)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                                )
-                                .padding(.horizontal)
-                            }
-                        }
-
-                        // Actions Section
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("Actions")
-                                .font(.caption)
-                                .foregroundColor(.white.opacity(0.5))
-                                .padding(.horizontal)
-
-                            VStack(spacing: 1) {
-                                NavigationLink(destination: PrivacySettingsView()) {
-                                    HStack {
-                                        Label("Privacy Settings", systemImage: "lock.shield")
-                                            .foregroundColor(.white)
-                                        Spacer()
-                                        Image(systemName: "chevron.right")
-                                            .foregroundColor(.white.opacity(0.3))
-                                    }
-                                    .padding()
-                                    .background(Color.white.opacity(0.05))
-                                }
-
-                                Button {
-                                    PassportScannerService().clearAllPassportData()
-                                } label: {
-                                    HStack {
-                                        Label("Clear Passport Cache", systemImage: "trash")
-                                            .foregroundColor(.red.opacity(0.8))
-                                        Spacer()
-                                    }
-                                    .padding()
-                                    .background(Color.white.opacity(0.05))
-                                }
-
-                                Button(role: .destructive) {
-                                    authManager.signOut()
-                                } label: {
-                                    HStack {
-                                        Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
-                                            .foregroundColor(.red)
-                                        Spacer()
-                                    }
-                                    .padding()
-                                    .background(Color.white.opacity(0.05))
-                                }
-                            }
-                            .cornerRadius(12)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                            )
-                            .padding(.horizontal)
-                        }
+                        profileHeader
+                        walletSection
+                        actionsSection
                     }
                     .padding(.bottom)
                 }
             }
             .navigationTitle("Profile")
-            .toolbarBackground(.hidden, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(Color.clear, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
+        }
+    }
+
+    private var profileHeader: some View {
+        VStack(spacing: 16) {
+            Image(systemName: "person.circle.fill")
+                .font(.system(size: 80))
+                .foregroundColor(.white)
+                .shadow(color: .white.opacity(0.1), radius: 10)
+
+            VStack(spacing: 4) {
+                Text("Individual User")
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+
+                if let user = authManager.currentUser,
+                    let proofCount = user.zkProofCount
+                {
+                    Text("\(proofCount) ZK proof(s) created")
+                        .font(.caption)
+                        .foregroundColor(.white.opacity(0.7))
+                }
+            }
+        }
+        .padding(.top, 20)
+    }
+
+    private var walletSection: some View {
+        Group {
+            if let address = authManager.currentUser?.walletAddress {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Wallet")
+                        .font(.caption)
+                        .foregroundColor(.white.opacity(0.5))
+                        .padding(.horizontal)
+
+                    HStack {
+                        Text("Address")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Text(address.prefix(8) + "..." + address.suffix(8))
+                            .font(.system(.caption, design: .monospaced))
+                            .foregroundColor(.white.opacity(0.7))
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.05))
+                    .cornerRadius(12)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    )
+                    .padding(.horizontal)
+                }
+            }
+        }
+    }
+
+    private var actionsSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Actions")
+                .font(.caption)
+                .foregroundColor(.white.opacity(0.5))
+                .padding(.horizontal)
+
+            VStack(spacing: 1) {
+                NavigationLink(destination: PrivacySettingsView()) {
+                    HStack {
+                        Label("Privacy Settings", systemImage: "lock.shield")
+                            .foregroundColor(.white)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.white.opacity(0.3))
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.05))
+                }
+
+                Button {
+                    PassportScannerService().clearAllPassportData()
+                } label: {
+                    HStack {
+                        Label("Clear Passport Cache", systemImage: "trash")
+                            .foregroundColor(.red.opacity(0.8))
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.05))
+                }
+
+                Button(role: .destructive) {
+                    authManager.signOut()
+                } label: {
+                    HStack {
+                        Label(
+                            "Sign Out",
+                            systemImage: "rectangle.portrait.and.arrow.right"
+                        )
+                        .foregroundColor(.red)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color.white.opacity(0.05))
+                }
+            }
+            .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+            )
+            .padding(.horizontal)
         }
     }
 }

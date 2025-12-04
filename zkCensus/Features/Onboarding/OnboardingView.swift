@@ -18,27 +18,28 @@ struct OnboardingView: View {
                         Spacer(minLength: geometry.size.height * 0.10)
 
                         // Logo
-                        Image("ghost_logo")
+                        Image("ghost_white_logo")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 100, height: 100)
+                            .frame(width: 300, height: 300)
                             .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 0)
                             .padding(.bottom, 20)
 
                         // Tagline
                         VStack(alignment: .center, spacing: 16) {
-                            Text("Democracy doesn't need your name")
-                                .font(.system(size: 36, weight: .heavy, design: .default))
-                                .foregroundColor(.black)
+                            // Text("Democracy doesn't need your name")
+                            Text("Anonymous, Yet Verified")
+                                .font(.system(size: 28, weight: .heavy, design: .default))
+                                .foregroundColor(.white)
                                 .multilineTextAlignment(.center)
                                 .lineSpacing(4)
                                 .shadow(color: .white.opacity(0.3), radius: 2, x: 0, y: 1)
 
-                            Text("Prove your identity with zero knowledge. Your passport stays private.")
-                                .font(.system(size: 17, weight: .regular))
-                                .foregroundColor(.black.opacity(0.8))
-                                .multilineTextAlignment(.center)
-                                .lineSpacing(4)
+                            // Text("Prove your identity with zero knowledge. Your passport stays private.")
+                            //     .font(.system(size: 17, weight: .regular))
+                            //     .foregroundColor(.black.opacity(0.8))
+                            //     .multilineTextAlignment(.center)
+                            //     .lineSpacing(4)
                         }
                         .padding(.horizontal, 30)
                         .padding(.bottom, geometry.size.height * 0.05)
@@ -78,8 +79,9 @@ struct OnboardingView: View {
                                     Capsule()
                                         .fill(Color.white)
                                 )
-                                .shadow(color: Color.white.opacity(0.1),
-                                        radius: 10, x: 0, y: 0) // Glow effect
+                                .shadow(
+                                    color: Color.white.opacity(0.1),
+                                    radius: 10, x: 0, y: 0)  // Glow effect
                             }
                             .buttonStyle(PressableButtonStyle())
 
@@ -106,7 +108,7 @@ struct OnboardingView: View {
                                     Capsule()
                                         .stroke(Color.white.opacity(0.1), lineWidth: 1)
                                 )
-                                .foregroundColor(.black)
+                                .foregroundColor(.white)
                             }
                             .buttonStyle(PressableButtonStyle())
                         }
@@ -124,16 +126,16 @@ struct OnboardingView: View {
                                     Text("Terms of Service")
                                         .font(.system(size: 12, weight: .medium))
                                         .underline()
-                                        .foregroundColor(.black)
+                                        .foregroundColor(.white)
                                 }
                                 Text("and")
                                     .font(.system(size: 12))
-                                    .foregroundColor(.black.opacity(0.7))
+                                    .foregroundColor(.white.opacity(0.7))
                                 Button(action: { print("Privacy tapped") }) {
                                     Text("Privacy Policy")
                                         .font(.system(size: 12, weight: .medium))
                                         .underline()
-                                        .foregroundColor(.black)
+                                        .foregroundColor(.white)
                                 }
                             }
                         }
@@ -147,10 +149,10 @@ struct OnboardingView: View {
                                 Text("Encrypted")
                                     .font(.system(size: 11, weight: .medium))
                             }
-                            .foregroundColor(.black.opacity(0.7))
+                            .foregroundColor(.white.opacity(0.7))
 
                             Circle()
-                                .fill(Color.black.opacity(0.3))
+                                .fill(Color.white.opacity(0.3))
                                 .frame(width: 3, height: 3)
 
                             HStack(spacing: 4) {
@@ -159,7 +161,7 @@ struct OnboardingView: View {
                                 Text("No tracking")
                                     .font(.system(size: 11, weight: .medium))
                             }
-                            .foregroundColor(.black.opacity(0.7))
+                            .foregroundColor(.white.opacity(0.7))
                         }
                         .padding(.bottom, max(geometry.safeAreaInsets.bottom, 10) - 6)
                     }
@@ -167,7 +169,7 @@ struct OnboardingView: View {
                 }
             }
             .alert("Error", isPresented: $showError) {
-                Button("OK", role: .cancel) { }
+                Button("OK", role: .cancel) {}
             } message: {
                 Text(errorMessage)
             }
@@ -180,7 +182,7 @@ struct OnboardingView: View {
         print("Continue with Google - BYPASSED for development")
         // TEMPORARY: Bypass Google authentication for development/testing
         // In production, this should properly authenticate with Privy
-        
+
         /* COMMENTED OUT - Original Privy Google Authentication
         print("Continue with Google via Privy")
         Task {
@@ -196,7 +198,7 @@ struct OnboardingView: View {
             }
         }
         */
-        
+
         // Simulate successful authentication and navigate to user type selection
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             print("Google authentication bypassed - user authenticated")
