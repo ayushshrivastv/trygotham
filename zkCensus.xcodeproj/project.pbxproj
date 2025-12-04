@@ -12,12 +12,14 @@
 		11F74357227FD3AA292AFBED /* PrivyService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 614E37341D87F1A9B5E8910F /* PrivyService.swift */; };
 		1250F12F0A9F6A9F12BB3908 /* PassportScannerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C12E2A828153668126FADC0 /* PassportScannerService.swift */; };
 		166608C11F7F14CA5876119E /* PassportScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42CAFC9584C22A4FDAAE14B /* PassportScannerView.swift */; };
+		18DFF5A085686ED5CEC219D4 /* ghost.png in Resources */ = {isa = PBXBuildFile; fileRef = A432A53080B60BED22C187B0 /* ghost.png */; };
 		23BCABE2F3EF4F5CB7438071 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 11CBD66312F390CC3D971A67 /* Alamofire */; };
 		2F1E34822463EE5A5F886C9D /* UserDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846639E16B853C397E699F8B /* UserDashboardView.swift */; };
 		373455AE1D4FB20D3857B98B /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DC1636BF07C4E85CE62105 /* OnboardingView.swift */; };
 		39C30626F010AA99879454EF /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 4EA5AC46BDC4A9349D64E73A /* KeychainAccess */; };
 		39D9443E9275B4A2BFD7FA6F /* CensusModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE9A342F32C1908ADB7BA31E /* CensusModels.swift */; };
 		46F6091A5C8ADD80F38CBB01 /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21BC671B352B9BD5D6DFC47 /* PersistenceController.swift */; };
+		5929D24F9ACA184E392F38E8 /* BackgroundGradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1388A85DE04D5416D1BAAF8 /* BackgroundGradientView.swift */; };
 		5FF2F5BCA160385ADF9C7CEF /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB649EF002824EB782740591 /* AuthenticationManager.swift */; };
 		643E280C5F6F3785725476C4 /* UserType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE343B72F246F5B18A471D7 /* UserType.swift */; };
 		666A55E767F30A5D15605AF2 /* ZKProofService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3B505FA33E4B218A58C59D /* ZKProofService.swift */; };
@@ -26,11 +28,13 @@
 		8A4E20D1D817421BD648654B /* zkCensus.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 627A8251CDF4716CC65E5D76 /* zkCensus.xcdatamodeld */; };
 		92DBD117313C0B948D413BF2 /* UserOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94BEF7DC1AECF041A6DA1972 /* UserOnboardingView.swift */; };
 		9309B7064CD868908B025991 /* Package.swift.disabled in Resources */ = {isa = PBXBuildFile; fileRef = F1130C48AF673CC0BBA31A83 /* Package.swift.disabled */; };
-		96873BDBA122A6232888E7F4 /* Privy in Frameworks */ = {isa = PBXBuildFile; productRef = 907D8732FF48287C4A96D8DA /* Privy */; };
+		96873BDBA122A6232888E7F4 /* Privy in Frameworks */ = {isa = PBXBuildFile; productRef = 49F785016E7BECADCD100804 /* Privy */; };
 		96B7B4A0A13466755D2525E5 /* CompanyDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E79FD3F52BA0EB4AB5EDF179 /* CompanyDashboardView.swift */; };
 		A39F9CB5357A2CAA95075B5D /* PassportModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3083C981AC519919C2963B63 /* PassportModels.swift */; };
+		AB91BE0D39C8E93E7B7EDA18 /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 200D522DAEE4BB9EB9E7FD12 /* SplashScreenView.swift */; };
 		C896216DBCDE5774F28BD69A /* CompanyOnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 991088A4C21BDBAE9E0E06E9 /* CompanyOnboardingView.swift */; };
 		D2AE15F5A2102D43C4245DF4 /* SolanaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F6A1E9415F89EBC8721298 /* SolanaService.swift */; };
+		DA7470F6CE536DC8308AA896 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 46D360EBF4B38EDAE9D9E403 /* Assets.xcassets */; };
 		E2225438145CE2ACD012657C /* DGCharts in Frameworks */ = {isa = PBXBuildFile; productRef = 2DC5031B4E3E493FABAA2102 /* DGCharts */; };
 		EDB96E204D293148AAEF5D08 /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5089324DA002AFAC2651F82C /* KeychainManager.swift */; };
 		FE3F1678EC1C8728F2F0D056 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B34D6D2315FFDEEED3C1671 /* ContentView.swift */; };
@@ -40,11 +44,13 @@
 /* Begin PBXFileReference section */
 		04DC1636BF07C4E85CE62105 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		1F3B505FA33E4B218A58C59D /* ZKProofService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZKProofService.swift; sourceTree = "<group>"; };
+		200D522DAEE4BB9EB9E7FD12 /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		29F6A1E9415F89EBC8721298 /* SolanaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolanaService.swift; sourceTree = "<group>"; };
 		2B51D60ED445102006E225C8 /* zkCensus.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = zkCensus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C0C567642E62B1F791AF4C1 /* ZKModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZKModels.swift; sourceTree = "<group>"; };
 		3083C981AC519919C2963B63 /* PassportModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassportModels.swift; sourceTree = "<group>"; };
 		30A637C076CF9851169863BD /* CensusDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CensusDetailView.swift; sourceTree = "<group>"; };
+		46D360EBF4B38EDAE9D9E403 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4AE343B72F246F5B18A471D7 /* UserType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserType.swift; sourceTree = "<group>"; };
 		4B34D6D2315FFDEEED3C1671 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5089324DA002AFAC2651F82C /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
@@ -54,12 +60,14 @@
 		846639E16B853C397E699F8B /* UserDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDashboardView.swift; sourceTree = "<group>"; };
 		94BEF7DC1AECF041A6DA1972 /* UserOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserOnboardingView.swift; sourceTree = "<group>"; };
 		991088A4C21BDBAE9E0E06E9 /* CompanyOnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyOnboardingView.swift; sourceTree = "<group>"; };
+		A432A53080B60BED22C187B0 /* ghost.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ghost.png; sourceTree = "<group>"; };
 		B42CAFC9584C22A4FDAAE14B /* PassportScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PassportScannerView.swift; sourceTree = "<group>"; };
 		CD355DD47811FAA8005B9C24 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		DCC3CCB893F2F97B58CFE216 /* CreateCensusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCensusView.swift; sourceTree = "<group>"; };
 		DF3CEED499D7B3D6890316B6 /* zkCensus.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = zkCensus.xcdatamodel; sourceTree = "<group>"; };
 		E79FD3F52BA0EB4AB5EDF179 /* CompanyDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyDashboardView.swift; sourceTree = "<group>"; };
 		F1130C48AF673CC0BBA31A83 /* Package.swift.disabled */ = {isa = PBXFileReference; path = Package.swift.disabled; sourceTree = "<group>"; };
+		F1388A85DE04D5416D1BAAF8 /* BackgroundGradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundGradientView.swift; sourceTree = "<group>"; };
 		F21BC671B352B9BD5D6DFC47 /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		FB649EF002824EB782740591 /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		FE9A342F32C1908ADB7BA31E /* CensusModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CensusModels.swift; sourceTree = "<group>"; };
@@ -92,11 +100,21 @@
 			isa = PBXGroup;
 			children = (
 				4B34D6D2315FFDEEED3C1671 /* ContentView.swift */,
+				A432A53080B60BED22C187B0 /* ghost.png */,
 				F1130C48AF673CC0BBA31A83 /* Package.swift.disabled */,
+				200D522DAEE4BB9EB9E7FD12 /* SplashScreenView.swift */,
 				835A69D3A3D4C92613E84C48 /* zkCensusApp.swift */,
 			);
 			name = App;
 			path = zkCensus/App;
+			sourceTree = "<group>";
+		};
+		2DF9D982C8F4D1FBE94715F0 /* zkCensus */ = {
+			isa = PBXGroup;
+			children = (
+				46D360EBF4B38EDAE9D9E403 /* Assets.xcassets */,
+			);
+			path = zkCensus;
 			sourceTree = "<group>";
 		};
 		325CD9A17180E25A5065EBC5 /* Features */ = {
@@ -170,6 +188,7 @@
 				325CD9A17180E25A5065EBC5 /* Features */,
 				BEB483D078D8F38612F2B530 /* Models */,
 				E8FD6376CD3D7726ED6F1DA9 /* Services */,
+				2DF9D982C8F4D1FBE94715F0 /* zkCensus */,
 				E0DF61176C6FFE317307BC9D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -247,6 +266,7 @@
 				43A26D4F0F110D0667264552 /* Authentication */,
 				9BD0321451402E04F1203760 /* Storage */,
 				47F65EA2078729C5FEFA4338 /* Utilities */,
+				F1388A85DE04D5416D1BAAF8 /* BackgroundGradientView.swift */,
 			);
 			name = Core;
 			path = zkCensus/Core;
@@ -277,7 +297,7 @@
 			);
 			name = zkCensus;
 			packageProductDependencies = (
-				907D8732FF48287C4A96D8DA /* Privy */,
+				49F785016E7BECADCD100804 /* Privy */,
 				11CBD66312F390CC3D971A67 /* Alamofire */,
 				4EA5AC46BDC4A9349D64E73A /* KeychainAccess */,
 				2DC5031B4E3E493FABAA2102 /* DGCharts */,
@@ -331,7 +351,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA7470F6CE536DC8308AA896 /* Assets.xcassets in Resources */,
 				9309B7064CD868908B025991 /* Package.swift.disabled in Resources */,
+				18DFF5A085686ED5CEC219D4 /* ghost.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,6 +366,7 @@
 			files = (
 				7E226E9D26CCA0C3349A9690 /* APIClient.swift in Sources */,
 				5FF2F5BCA160385ADF9C7CEF /* AuthenticationManager.swift in Sources */,
+				5929D24F9ACA184E392F38E8 /* BackgroundGradientView.swift in Sources */,
 				0C1C1672AECB8988F91666C0 /* CensusDetailView.swift in Sources */,
 				39D9443E9275B4A2BFD7FA6F /* CensusModels.swift in Sources */,
 				96B7B4A0A13466755D2525E5 /* CompanyDashboardView.swift in Sources */,
@@ -358,6 +381,7 @@
 				46F6091A5C8ADD80F38CBB01 /* PersistenceController.swift in Sources */,
 				11F74357227FD3AA292AFBED /* PrivyService.swift in Sources */,
 				D2AE15F5A2102D43C4245DF4 /* SolanaService.swift in Sources */,
+				AB91BE0D39C8E93E7B7EDA18 /* SplashScreenView.swift in Sources */,
 				2F1E34822463EE5A5F886C9D /* UserDashboardView.swift in Sources */,
 				92DBD117313C0B948D413BF2 /* UserOnboardingView.swift in Sources */,
 				643E280C5F6F3785725476C4 /* UserType.swift in Sources */,
@@ -611,15 +635,15 @@
 			package = BEBD37C2A0C8A7E190F19AE5 /* XCRemoteSwiftPackageReference "Charts" */;
 			productName = DGCharts;
 		};
+		49F785016E7BECADCD100804 /* Privy */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 418E4F58042AB98BE5D4A917 /* XCRemoteSwiftPackageReference "privy-ios" */;
+			productName = Privy;
+		};
 		4EA5AC46BDC4A9349D64E73A /* KeychainAccess */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DB1CB5A2246CB6A2A3E29679 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
-		};
-		907D8732FF48287C4A96D8DA /* Privy */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 418E4F58042AB98BE5D4A917 /* XCRemoteSwiftPackageReference "privy-ios" */;
-			productName = Privy;
 		};
 /* End XCSwiftPackageProductDependency section */
 

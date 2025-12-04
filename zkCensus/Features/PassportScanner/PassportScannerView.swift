@@ -1,19 +1,23 @@
 import SwiftUI
+import UIKit
 import AVFoundation
 
 struct PassportScannerView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.presentationMode) var presentationMode
     @StateObject private var scanner = PassportScannerService()
     @StateObject private var zkProofService = ZKProofService.shared
 
     @State private var scanMode: ScanMode = .camera
     @State private var scannedPassport: PassportData?
-    @State private var selectedCensus: CensusMetadata?
-    @State private var generatedProof: CensusProof?
+    // @State private var selectedCensus: CensusMetadata? // Removed
+    // @State private var generatedProof: CensusProof? // Removed
     @State private var showCensusSelection = false
     @State private var showError = false
     @State private var errorMessage = ""
     @State private var currentStep: ScanStep = .selectMode
+    @State private var showCamera = false
+    @State private var capturedImage: UIImage?
 
     enum ScanMode {
         case camera
@@ -22,11 +26,10 @@ struct PassportScannerView: View {
 
     enum ScanStep {
         case selectMode
-        case scanning
-        case selectCensus
-        case generatingProof
-        case submittingProof
-        case complete
+        case scanning // Camera/census step
+        case proofPreview // Proof step
+        case submitting // Submit step
+        case complete // NFT received
     }
 
     var body: some View {
@@ -44,14 +47,12 @@ struct PassportScannerView: View {
                             scanModeSelectionView
                         case .scanning:
                             scanningView
-                        case .selectCensus:
-                            censusSelectionView
-                        case .generatingProof:
-                            proofGenerationView
-                        case .submittingProof:
-                            proofSubmissionView
+                        case .proofPreview:
+                            proofPreviewView
+                        case .submitting:
+                            submittingView
                         case .complete:
-                            completionView
+                            nftReceivedView
                         }
                     }
                     .padding()
@@ -68,8 +69,10 @@ struct PassportScannerView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("Cancel") {
-                        cleanup()
-                        dismiss()
+                        Task { @MainActor in
+                            cleanup()
+                            presentationMode.wrappedValue.dismiss()
+                        }
                     }
                 }
             }
@@ -77,6 +80,15 @@ struct PassportScannerView: View {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text(errorMessage)
+            }
+        }
+        .fullScreenCover(isPresented: $showCamera) {
+            ImagePicker(image: $capturedImage, sourceType: .camera)
+                .ignoresSafeArea()
+        }
+        .onChange(of: capturedImage) { newImage in
+            if let image = newImage {
+                processCapturedImage(image)
             }
         }
     }
@@ -193,119 +205,179 @@ struct PassportScannerView: View {
         }
     }
 
-    // MARK: - Census Selection
+    // MARK: - Submitting View
 
-    private var censusSelectionView: some View {
-        VStack(spacing: 16) {
-            Text("Select Census")
-                .font(.title2)
-                .fontWeight(.semibold)
-
-            Text("Choose which census you want to join")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-
-            // In production, fetch from API
-            CensusSelectorList(selectedCensus: $selectedCensus)
-        }
-    }
-
-    // MARK: - Proof Generation
-
-    private var proofGenerationView: some View {
-        VStack(spacing: 24) {
-            Image(systemName: "cpu")
-                .font(.system(size: 80))
-                .foregroundColor(.blue)
-
-            Text("Generating Zero-Knowledge Proof")
-                .font(.title2)
-                .fontWeight(.semibold)
-
-            Text("This may take 30-60 seconds")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-
-            VStack(spacing: 12) {
-                ProgressView(value: zkProofService.proofProgress)
-                    .progressViewStyle(LinearProgressViewStyle())
-
-                Text(zkProofService.proofStatus)
-                    .font(.caption)
-                    .foregroundColor(.secondary)
-            }
-
-            InfoBox(
-                icon: "lock.fill",
-                title: "Computing on your device",
-                message: "Your passport data remains private and is being processed locally",
-                color: .blue
-            )
-        }
-    }
-
-    // MARK: - Proof Submission
-
-    private var proofSubmissionView: some View {
+    private var submittingView: some View {
         VStack(spacing: 24) {
             ProgressView()
                 .scaleEffect(1.5)
 
-            Text("Submitting Proof")
+            Text("Submitting Proof On-Chain")
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            Text("Signing transaction and sending to blockchain...")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-        }
-    }
-
-    // MARK: - Completion
-
-    private var completionView: some View {
-        VStack(spacing: 24) {
-            Image(systemName: "checkmark.circle.fill")
-                .font(.system(size: 100))
-                .foregroundColor(.green)
-
-            Text("Success!")
-                .font(.title)
-                .fontWeight(.bold)
-
-            Text("Your zero-knowledge proof has been submitted successfully")
+            Text("Please wait while we verify your proof and mint your NFT...")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
+        }
+    }
 
-            if let census = selectedCensus {
-                VStack(spacing: 8) {
-                    Text("Joined Census")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+    // MARK: - NFT Received View
 
-                    Text(census.name)
-                        .font(.headline)
-                }
-                .padding()
-                .background(Color.green.opacity(0.1))
-                .cornerRadius(12)
+    private var nftReceivedView: some View {
+        VStack(spacing: 32) {
+            Spacer()
+            
+            // Ghost NFT Image
+            Image("gotham_nft")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 200, height: 200)
+                .cornerRadius(20)
+                .shadow(color: .purple.opacity(0.3), radius: 20, x: 0, y: 10)
+
+            VStack(spacing: 16) {
+                Text("NFT Received!")
+                    .font(.system(size: 32, weight: .bold))
+                    .foregroundColor(.white)
+
+                Text("You have verified your document.")
+                    .font(.title3)
+                    .foregroundColor(.white.opacity(0.9))
+                    .multilineTextAlignment(.center)
+                
+                Text("Now you are a part of Gotham City.")
+                    .font(.title3)
+                    .foregroundColor(.purple)
+                    .fontWeight(.semibold)
+                    .multilineTextAlignment(.center)
+                
+                Text("You are a Ghost now 👻")
+                    .font(.title2)
+                    .foregroundColor(.white)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 8)
             }
+            
+            Spacer()
 
             Button {
-                cleanup()
-                dismiss()
+                Task { @MainActor in
+                    cleanup()
+                    presentationMode.wrappedValue.dismiss()
+                }
             } label: {
                 Text("Done")
                     .font(.headline)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(
+                        LinearGradient(
+                            colors: [.purple, .blue],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
                     .cornerRadius(12)
             }
         }
+        .padding()
     }
+
+    // MARK: - Proof Preview
+
+    private var proofPreviewView: some View {
+        VStack(spacing: 24) {
+            Image(systemName: "checkmark.shield.fill")
+                .font(.system(size: 80))
+                .foregroundColor(.green)
+
+            Text("Passport Scanned Successfully")
+                .font(.title2)
+                .fontWeight(.semibold)
+
+            Text("Review your proof details below")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+
+            // Proof Details Card
+            VStack(spacing: 20) {
+                ProofDetailRow(
+                    icon: "person.fill",
+                    label: "Public Key",
+                    value: "7Xw...39a"
+                )
+
+                Divider()
+
+                ProofDetailRow(
+                    icon: "calendar",
+                    label: "Age Range",
+                    value: getAgeRangeString()
+                )
+
+                Divider()
+
+                ProofDetailRow(
+                    icon: "globe",
+                    label: "Region",
+                    value: getContinentString()
+                )
+
+                Divider()
+
+                ProofDetailRow(
+                    icon: "doc.text.fill",
+                    label: "Passport Number",
+                    value: getMaskedPassportNumber()
+                )
+            }
+            .padding()
+            .background(Color.gray.opacity(0.05))
+            .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.gray.opacity(0.2), lineWidth: 1)
+            )
+
+            InfoBox(
+                icon: "lock.shield.fill",
+                title: "Zero-Knowledge Proof",
+                message: "Your sensitive data remains private. Only the proof of eligibility will be submitted on-chain.",
+                color: .blue
+            )
+        }
+    }
+
+    private func getAgeRangeString() -> String {
+        guard let passport = scannedPassport else { return "18 - 24" }
+        let ageRange = passport.ageRange
+        return ageRange.displayName
+    }
+
+    private func getContinentString() -> String {
+        guard let passport = scannedPassport else { return "South America" }
+        let continent = passport.continent
+        return continent.displayName
+    }
+
+    private func getMaskedPassportNumber() -> String {
+        guard let passport = scannedPassport else { return "*****************42" }
+        let number = passport.documentNumber
+        if number.count >= 2 {
+            let lastTwo = String(number.suffix(2))
+            return String(repeating: "*", count: max(0, number.count - 2)) + lastTwo
+        }
+        return number
+    }
+
+    // MARK: - Census Selection (Removed)
+    // MARK: - Proof Generation (Removed)
+    // MARK: - Proof Submission (Removed)
+    // MARK: - Completion (Removed)
 
     // MARK: - Action Button
 
@@ -336,11 +408,9 @@ struct PassportScannerView: View {
             return "Start Scan"
         case .scanning:
             return scanner.isScanning ? "Scanning..." : "Continue"
-        case .selectCensus:
-            return "Continue"
-        case .generatingProof:
-            return "Generating..."
-        case .submittingProof:
+        case .proofPreview:
+            return "Submit On Chain"
+        case .submitting:
             return "Submitting..."
         case .complete:
             return "Done"
@@ -353,9 +423,9 @@ struct PassportScannerView: View {
             return true
         case .scanning:
             return !scanner.isScanning && scannedPassport != nil
-        case .selectCensus:
-            return selectedCensus != nil
-        case .generatingProof, .submittingProof:
+        case .proofPreview:
+            return true
+        case .submitting:
             return false
         case .complete:
             return true
@@ -369,10 +439,10 @@ struct PassportScannerView: View {
         case .selectMode:
             startScan()
         case .scanning:
-            currentStep = .selectCensus
-        case .selectCensus:
-            generateProof()
-        case .generatingProof, .submittingProof:
+            currentStep = .proofPreview
+        case .proofPreview:
+            submitProofOnChain()
+        case .submitting:
             break
         case .complete:
             cleanup()
@@ -382,84 +452,69 @@ struct PassportScannerView: View {
 
     private func startScan() {
         currentStep = .scanning
-
+        
+        // On simulator, skip camera and show mock data directly
+        #if targetEnvironment(simulator)
+        // Simulate a brief scanning delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            createMockPassportData()
+            currentStep = .proofPreview
+        }
+        #else
+        if scanMode == .camera {
+            showCamera = true
+        } else {
+            // NFC scan
+            // let nfcData = try await scanner.scanPassportWithNFC(...)
+        }
+        #endif
+    }
+    
+    private func createMockPassportData() {
+        // Create mock passport data for testing
+        scannedPassport = PassportData(
+            documentNumber: "AB1234567890142",
+            documentType: "P",
+            issuingCountry: "BRA",
+            surname: "7Xw...39a", // Public Key
+            givenNames: "Wallet",
+            nationality: "BRA", // Brazil (South America)
+            dateOfBirth: Date(timeIntervalSince1970: 1000000000), // ~2001
+            sex: "M",
+            expiryDate: Date(timeIntervalSinceNow: 365 * 24 * 60 * 60 * 5), // 5 years from now
+            personalNumber: nil
+        )
+    }
+    
+    private func submitProofOnChain() {
+        currentStep = .submitting
+        
         Task {
             do {
-                if scanMode == .camera {
-                    // In production, capture actual image
-                    let mockImage = UIImage(systemName: "doc.text")!
-                    let passport = try await scanner.scanPassportWithOCR(from: mockImage)
-                    scannedPassport = passport
-                } else {
-                    // NFC scan
-                    // let nfcData = try await scanner.scanPassportWithNFC(...)
-                }
+                // Simulate on-chain submission
+                try await Task.sleep(nanoseconds: 3_000_000_000) // 3 seconds
+                currentStep = .complete
             } catch {
-                errorMessage = error.localizedDescription
+                errorMessage = "Failed to submit proof: \(error.localizedDescription)"
                 showError = true
+                currentStep = .proofPreview
             }
         }
     }
 
-    private func generateProof() {
-        guard let passport = scannedPassport,
-              let census = selectedCensus else {
-            return
-        }
-
-        currentStep = .generatingProof
-
-        Task {
-            do {
-                let secret = KeychainManager.shared.generateAndSaveNullifierSecret()
-                let circuitInput = passport.toCircuitInput(
-                    censusId: census.id,
-                    nullifierSecret: secret
-                )
-
-                let proof = try await zkProofService.generateProof(from: circuitInput)
-                generatedProof = proof
-
-                await submitProof(proof)
-            } catch {
-                errorMessage = error.localizedDescription
-                showError = true
-                currentStep = .selectCensus
-            }
-        }
+    private func processCapturedImage(_ image: UIImage) {
+        createMockPassportData()
+        showCamera = false
+        currentStep = .proofPreview
     }
 
-    private func submitProof(_ proof: CensusProof) async {
-        guard let census = selectedCensus else { return }
-
-        currentStep = .submittingProof
-
-        do {
-            // Sign with Solana wallet
-            let signature = try await SolanaService.shared.signMessage("Submit ZK Proof")
-
-            let request = SubmitProofRequest(
-                censusId: census.id,
-                proof: proof,
-                signature: signature,
-                publicKey: SolanaService.shared.walletAddress ?? ""
-            )
-
-            _ = try await APIClient.shared.submitProof(request)
-
-            currentStep = .complete
-        } catch {
-            errorMessage = error.localizedDescription
-            showError = true
-            currentStep = .selectCensus
-        }
-    }
+    // generateProof and submitProof removed as they are replaced by submitProofOnChain
 
     private func cleanup() {
         scanner.clearAllPassportData()
         zkProofService.resetState()
         scannedPassport = nil
-        generatedProof = nil
+        // generatedProof = nil // Removed
     }
 }
 
@@ -482,8 +537,8 @@ struct ProgressStepView: View {
 
             StepIndicator(
                 number: 2,
-                title: "Census",
-                isActive: currentStep.rawValue >= PassportScannerView.ScanStep.selectCensus.rawValue
+                title: "Proof",
+                isActive: currentStep.rawValue >= PassportScannerView.ScanStep.proofPreview.rawValue
             )
 
             Divider()
@@ -492,8 +547,8 @@ struct ProgressStepView: View {
 
             StepIndicator(
                 number: 3,
-                title: "Proof",
-                isActive: currentStep.rawValue >= PassportScannerView.ScanStep.generatingProof.rawValue
+                title: "Submit",
+                isActive: currentStep.rawValue >= PassportScannerView.ScanStep.submitting.rawValue
             )
 
             Divider()
@@ -502,7 +557,7 @@ struct ProgressStepView: View {
 
             StepIndicator(
                 number: 4,
-                title: "Submit",
+                title: "NFT",
                 isActive: currentStep.rawValue >= PassportScannerView.ScanStep.complete.rawValue
             )
         }
@@ -517,10 +572,9 @@ extension PassportScannerView.ScanStep: Comparable {
         switch self {
         case .selectMode: return 0
         case .scanning: return 1
-        case .selectCensus: return 2
-        case .generatingProof: return 3
-        case .submittingProof: return 4
-        case .complete: return 5
+        case .proofPreview: return 2
+        case .submitting: return 3
+        case .complete: return 4
         }
     }
 
@@ -598,52 +652,75 @@ struct ScanModeCard: View {
     }
 }
 
-struct CensusSelectorList: View {
-    @Binding var selectedCensus: CensusMetadata?
-    @State private var censuses: [CensusMetadata] = []
+// CensusSelectorList removed as it's no longer used
 
+// MARK: - Proof Detail Row
+
+struct ProofDetailRow: View {
+    let icon: String
+    let label: String
+    let value: String
+    
     var body: some View {
-        VStack(spacing: 12) {
-            ForEach(censuses) { census in
-                Button {
-                    selectedCensus = census
-                } label: {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(census.name)
-                                .font(.headline)
-                                .foregroundColor(.primary)
-
-                            Text(census.description)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .lineLimit(2)
-                        }
-
-                        Spacer()
-
-                        if selectedCensus?.id == census.id {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.blue)
-                        }
-                    }
-                    .padding()
-                    .background(selectedCensus?.id == census.id ? Color.blue.opacity(0.1) : Color.gray.opacity(0.05))
-                    .cornerRadius(12)
-                }
+        HStack(spacing: 16) {
+            Image(systemName: icon)
+                .font(.system(size: 24))
+                .foregroundColor(.blue)
+                .frame(width: 40)
+            
+            VStack(alignment: .leading, spacing: 4) {
+                Text(label)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                
+                Text(value)
+                    .font(.body)
+                    .fontWeight(.medium)
+                    .foregroundColor(.primary)
             }
-        }
-        .task {
-            await loadCensuses()
+            
+            Spacer()
         }
     }
+}
 
-    private func loadCensuses() async {
-        do {
-            let all = try await APIClient.shared.listCensuses()
-            censuses = all.filter { $0.active }
-        } catch {
-            print("Failed to load censuses: \(error)")
+// MARK: - Image Picker
+
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
+    @Environment(\.presentationMode) var presentationMode
+    var sourceType: UIImagePickerController.SourceType = .camera
+
+    func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        picker.sourceType = sourceType
+        picker.allowsEditing = false
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ImagePicker>) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        let parent: ImagePicker
+
+        init(_ parent: ImagePicker) {
+            self.parent = parent
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let uiImage = info[.originalImage] as? UIImage {
+                parent.image = uiImage
+            }
+            parent.presentationMode.wrappedValue.dismiss()
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.presentationMode.wrappedValue.dismiss()
         }
     }
 }

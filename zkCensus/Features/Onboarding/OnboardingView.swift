@@ -10,69 +10,45 @@ struct OnboardingView: View {
             GeometryReader { geometry in
                 ZStack {
 
-                    // MARK: Background – Full screen gradient or image
-                    // If you have an "Onboarding" image in Assets.xcassets, it will be used
-                    // Otherwise, a beautiful gradient will be shown
-                    Group {
-                        if let _ = UIImage(named: "Onboarding") {
-                            Image("Onboarding")
-                                .resizable()
-                                .scaledToFill()
-                                .ignoresSafeArea()
-                                .frame(minWidth: geometry.size.width, minHeight: geometry.size.height)
-                        } else {
-                            // Fallback gradient background
-                            LinearGradient(
-                                gradient: Gradient(colors: [
-                                    Color(red: 0.1, green: 0.2, blue: 0.45),
-                                    Color(red: 0.2, green: 0.3, blue: 0.6)
-                                ]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                            .ignoresSafeArea()
-                        }
-                    }
-
-                    // Subtle vignette / contrast overlay
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color.black.opacity(0.14),
-                            Color.clear,
-                            Color.black.opacity(0.5)
-                        ]),
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                    .ignoresSafeArea()
+                    // MARK: Background – Radiant gradient
+                    BackgroundGradientView()
 
                     // MARK: Foreground content
                     VStack {
-                        Spacer(minLength: geometry.size.height * 0.12)
+                        Spacer(minLength: geometry.size.height * 0.10)
+
+                        // Logo
+                        Image("ghost_white_logo")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 300, height: 300)
+                            .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 0)
+                            .padding(.bottom, 20)
 
                         // Tagline
-                        VStack(alignment: .leading, spacing: 12) {
-                            Text("Democracy doesn't need your name")
-                                .font(.system(size: 34, weight: .bold, design: .default))
+                        VStack(alignment: .center, spacing: 16) {
+                            // Text("Democracy doesn't need your name")
+                            Text("Anonymous, Yet Verified")
+                                .font(.system(size: 28, weight: .heavy, design: .default))
                                 .foregroundColor(.white)
-                                .multilineTextAlignment(.leading)
+                                .multilineTextAlignment(.center)
                                 .lineSpacing(4)
-                                .shadow(color: .black.opacity(0.3), radius: 3, x: 0, y: 2)
+                                .shadow(color: .white.opacity(0.3), radius: 2, x: 0, y: 1)
 
-                            Text("Prove your identity with zero knowledge. Your passport stays private.")
-                                .font(.system(size: 16, weight: .medium))
-                                .foregroundColor(.white.opacity(0.85))
-                                .multilineTextAlignment(.leading)
-                                .lineSpacing(2)
+                            // Text("Prove your identity with zero knowledge. Your passport stays private.")
+                            //     .font(.system(size: 17, weight: .regular))
+                            //     .foregroundColor(.black.opacity(0.8))
+                            //     .multilineTextAlignment(.center)
+                            //     .lineSpacing(4)
                         }
                         .padding(.horizontal, 30)
-                        .padding(.bottom, geometry.size.height * 0.08)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.bottom, geometry.size.height * 0.05)
+                        .frame(maxWidth: .infinity, alignment: .center)
 
                         Spacer()
 
                         // MARK: Buttons
-                        VStack(spacing: 14) {
+                        VStack(spacing: 16) {
 
                             // Continue with Google
                             Button(action: {
@@ -80,24 +56,32 @@ struct OnboardingView: View {
                                 handleGoogleLogin()
                             }) {
                                 HStack {
-                                    Image("google_logo")
-                                        .resizable()
-                                        .renderingMode(.original)
-                                        .frame(width: 22, height: 22)
-                                        .cornerRadius(3)
+                                    // Try to load asset; if missing, use SF Symbol fallback
+                                    if UIImage(named: "google_logo") != nil {
+                                        Image("google_logo")
+                                            .resizable()
+                                            .renderingMode(.original)
+                                            .frame(width: 22, height: 22)
+                                            .cornerRadius(3)
+                                    } else {
+                                        Image(systemName: "g.circle.fill")
+                                            .font(.system(size: 22, weight: .regular))
+                                            .foregroundColor(.black)
+                                    }
 
                                     Text("Continue with Google")
-                                        .font(.system(size: 17, weight: .semibold))
+                                        .font(.system(size: 17, weight: .bold))
                                 }
                                 .foregroundColor(.black)
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 54)
+                                .frame(height: 56)
                                 .background(
                                     Capsule()
                                         .fill(Color.white)
                                 )
-                                .shadow(color: Color.black.opacity(0.12),
-                                        radius: 8, x: 0, y: 4)
+                                .shadow(
+                                    color: Color.white.opacity(0.1),
+                                    radius: 10, x: 0, y: 0)  // Glow effect
                             }
                             .buttonStyle(PressableButtonStyle())
 
@@ -114,43 +98,44 @@ struct OnboardingView: View {
                                         .font(.system(size: 17, weight: .medium))
                                 }
                                 .frame(maxWidth: .infinity)
-                                .frame(height: 54)
+                                .frame(height: 56)
                                 .background(
                                     Capsule()
                                         .fill(.ultraThinMaterial)
+                                        .opacity(0.8)
                                 )
                                 .overlay(
                                     Capsule()
-                                        .stroke(Color.white.opacity(0.18), lineWidth: 1)
+                                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
                                 )
                                 .foregroundColor(.white)
                             }
                             .buttonStyle(PressableButtonStyle())
                         }
                         .padding(.horizontal, 32)
-                        .padding(.bottom, 12)
+                        .padding(.bottom, 20)
 
                         // MARK: Legal text
                         VStack(spacing: 6) {
                             Text("By pressing \"Continue\", you agree to our")
                                 .font(.system(size: 12))
-                                .foregroundColor(.white.opacity(0.65))
+                                .foregroundColor(.black.opacity(0.7))
 
                             HStack(spacing: 6) {
                                 Button(action: { print("Terms tapped") }) {
                                     Text("Terms of Service")
                                         .font(.system(size: 12, weight: .medium))
                                         .underline()
-                                        .foregroundColor(.white.opacity(0.85))
+                                        .foregroundColor(.white)
                                 }
                                 Text("and")
                                     .font(.system(size: 12))
-                                    .foregroundColor(.white.opacity(0.65))
+                                    .foregroundColor(.white.opacity(0.7))
                                 Button(action: { print("Privacy tapped") }) {
                                     Text("Privacy Policy")
                                         .font(.system(size: 12, weight: .medium))
                                         .underline()
-                                        .foregroundColor(.white.opacity(0.85))
+                                        .foregroundColor(.white)
                                 }
                             }
                         }
@@ -184,7 +169,7 @@ struct OnboardingView: View {
                 }
             }
             .alert("Error", isPresented: $showError) {
-                Button("OK", role: .cancel) { }
+                Button("OK", role: .cancel) {}
             } message: {
                 Text(errorMessage)
             }
@@ -194,6 +179,11 @@ struct OnboardingView: View {
     // MARK: - Login Methods
 
     private func handleGoogleLogin() {
+        print("Continue with Google - BYPASSED for development")
+        // TEMPORARY: Bypass Google authentication for development/testing
+        // In production, this should properly authenticate with Privy
+
+        /* COMMENTED OUT - Original Privy Google Authentication
         print("Continue with Google via Privy")
         Task {
             do {
@@ -206,6 +196,16 @@ struct OnboardingView: View {
                     showError = true
                 }
             }
+        }
+        */
+
+        // Simulate successful authentication and navigate to user type selection
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            print("Google authentication bypassed - user authenticated")
+            // Mark user as authenticated to proceed to the app
+            self.authManager.isAuthenticated = true
+            // Set a default user type (can be changed based on actual flow)
+            self.authManager.userType = .individual
         }
     }
 

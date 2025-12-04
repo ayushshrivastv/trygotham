@@ -9,126 +9,149 @@ struct UserOnboardingView: View {
     @State private var errorMessage = ""
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 32) {
-                // Header
-                VStack(spacing: 16) {
-                    Image(systemName: "person.badge.shield.checkmark.fill")
-                        .font(.system(size: 80))
-                        .foregroundColor(.blue)
+        ZStack {
+            // Background gradient
+            BackgroundGradientView()
 
-                    Text("Get Started")
-                        .font(.title)
-                        .fontWeight(.bold)
+            ScrollView {
+                VStack(spacing: 32) {
+                    // Header
+                    VStack(spacing: 16) {
+                        Image(systemName: "person.badge.shield.checkmark.fill")
+                            .font(.system(size: 80))
+                            .foregroundColor(.black)
+                            .shadow(color: .white.opacity(0.2), radius: 10, x: 0, y: 0)
 
-                    Text("Connect your Solana wallet to start creating zero-knowledge proofs")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                }
-                .padding(.top, 40)
-
-                // How it Works
-                VStack(alignment: .leading, spacing: 20) {
-                    Text("How it works")
-                        .font(.title2)
-                        .fontWeight(.semibold)
-
-                    StepView(
-                        number: 1,
-                        title: "Connect Wallet",
-                        description: "Link your Solana wallet for secure authentication"
-                    )
-
-                    StepView(
-                        number: 2,
-                        title: "Scan Passport",
-                        description: "Use your camera or NFC to scan your passport"
-                    )
-
-                    StepView(
-                        number: 3,
-                        title: "Generate Proof",
-                        description: "Create a zero-knowledge proof on your device"
-                    )
-
-                    StepView(
-                        number: 4,
-                        title: "Share Securely",
-                        description: "Share proofs with companies while keeping your data private"
-                    )
-                }
-                .padding()
-                .background(Color.gray.opacity(0.05))
-                .cornerRadius(16)
-                .padding(.horizontal)
-
-                // Privacy Guarantee
-                VStack(spacing: 16) {
-                    HStack {
-                        Image(systemName: "lock.shield.fill")
-                            .foregroundColor(.green)
+                        Text("Get Started")
                             .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.black)
 
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Complete Privacy")
-                                .font(.headline)
+                        Text("Connect your Solana wallet to start creating zero-knowledge proofs")
+                            .font(.subheadline)
+                            .foregroundColor(.black.opacity(0.8))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal)
+                    }
+                    .padding(.top, 40)
 
-                            Text("Your passport data never leaves your device")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
+                    // How it Works
+                    VStack(alignment: .leading, spacing: 20) {
+                        Text("How it works")
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.black)
 
-                        Spacer()
+                        StepView(
+                            number: 1,
+                            title: "Connect Wallet",
+                            description: "Link your Solana wallet for secure authentication"
+                        )
+
+                        StepView(
+                            number: 2,
+                            title: "Scan Passport",
+                            description: "Use your camera or NFC to scan your passport"
+                        )
+
+                        StepView(
+                            number: 3,
+                            title: "Generate Proof",
+                            description: "Create a zero-knowledge proof on your device"
+                        )
+
+                        StepView(
+                            number: 4,
+                            title: "Share Securely",
+                            description: "Share proofs with companies while keeping your data private"
+                        )
                     }
                     .padding()
-                    .background(Color.green.opacity(0.1))
-                    .cornerRadius(12)
-
-                    HStack {
-                        Image(systemName: "eye.slash.fill")
-                            .foregroundColor(.blue)
-                            .font(.title)
-
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Zero Knowledge")
-                                .font(.headline)
-
-                            Text("Prove facts without revealing personal information")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-
-                        Spacer()
-                    }
-                    .padding()
-                    .background(Color.blue.opacity(0.1))
-                    .cornerRadius(12)
-                }
-                .padding(.horizontal)
-
-                Spacer(minLength: 40)
-
-                // Connect Wallet Button
-                Button(action: connectWallet) {
-                    HStack {
-                        if isLoading {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        }
-                        Image(systemName: "link.circle.fill")
-                        Text(isLoading ? "Connecting..." : "Connect Wallet")
-                    }
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .cornerRadius(12)
+                    .background(Color.white.opacity(0.2))
+                    .cornerRadius(16)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 16)
+                            .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                    )
                     .padding(.horizontal)
+
+                    // Privacy Guarantee
+                    VStack(spacing: 16) {
+                        HStack {
+                            Image(systemName: "lock.shield.fill")
+                                .foregroundColor(.black)
+                                .font(.title)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Complete Privacy")
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+
+                                Text("Your passport data never leaves your device")
+                                    .font(.caption)
+                                    .foregroundColor(.black.opacity(0.8))
+                            }
+
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                        )
+
+                        HStack {
+                            Image(systemName: "eye.slash.fill")
+                                .foregroundColor(.black)
+                                .font(.title)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Zero Knowledge")
+                                    .font(.headline)
+                                    .foregroundColor(.black)
+
+                                Text("Prove facts without revealing personal information")
+                                    .font(.caption)
+                                    .foregroundColor(.black.opacity(0.8))
+                            }
+
+                            Spacer()
+                        }
+                        .padding()
+                        .background(Color.white.opacity(0.2))
+                        .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color.black.opacity(0.2), lineWidth: 1)
+                        )
+                    }
+                    .padding(.horizontal)
+
+                    Spacer(minLength: 40)
+
+                    // Connect Wallet Button
+                    Button(action: connectWallet) {
+                        HStack {
+                            if isLoading {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                            }
+                            Image(systemName: "link.circle.fill")
+                            Text(isLoading ? "Connecting..." : "Connect Wallet")
+                        }
+                        .font(.headline)
+                        .foregroundColor(.black)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 0)
+                        .padding(.horizontal)
+                    }
+                    .disabled(isLoading)
                 }
-                .disabled(isLoading)
             }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -172,21 +195,22 @@ struct StepView: View {
         HStack(alignment: .top, spacing: 16) {
             ZStack {
                 Circle()
-                    .fill(Color.blue.opacity(0.2))
+                    .fill(Color.black.opacity(0.2))
                     .frame(width: 40, height: 40)
 
                 Text("\(number)")
                     .font(.headline)
-                    .foregroundColor(.blue)
+                    .foregroundColor(.black)
             }
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(.headline)
+                    .foregroundColor(.black)
 
                 Text(description)
                     .font(.caption)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.black.opacity(0.8))
             }
 
             Spacer()
